@@ -1,0 +1,15 @@
+# QuestaSim
+work/
+transcript
+vsim.wlf
+*.wlf
+*.ucdb
+modelsim.ini
+wave.do
+
+# Waveform dump
+dump.vcd
+
+# Python
+__pycache__/
+*.pyc
