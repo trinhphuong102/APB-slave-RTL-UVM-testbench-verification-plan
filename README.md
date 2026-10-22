@@ -82,10 +82,18 @@ py run_sim.py -gui     # mở QuestaSim kèm waveform
 ├── rtl/
 │   └── async_apb_slave.sv
 ├── tb/
-│   ├── apb_if.sv  apb_transaction.sv  apb_sequence.sv
-│   ├── apb_driver.sv  apb_monitor.sv  apb_agent.sv
-│   ├── apb_scoreboard.sv  apb_coverage.sv  apb_env.sv
-│   └── apb_test.sv  apb_pkg.sv  apb_tb_top.sv
+│   ├── apb_agent.sv
+│   ├── apb_coverage.sv
+│   ├── apb_driver.sv
+│   ├── apb_env.sv
+│   ├── apb_if.sv
+│   ├── apb_monitor.sv
+│   ├── apb_pkg.sv
+│   ├── apb_scoreboard.sv
+│   ├── apb_sequence.sv
+│   ├── apb_tb_top.sv
+│   ├── apb_test.sv
+│   └── apb_transaction.sv
 ├── script/
 │   └── run_sim.py
 ├── docs/
