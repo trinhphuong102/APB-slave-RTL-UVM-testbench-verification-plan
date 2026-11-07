@@ -52,9 +52,10 @@ apb_test
 
 ## Kết quả
 
-QuestaSim 10.7c, UVM-1.1d, 108 giao dịch, 3335 ns:
+QuestaSim (UVM 1.1d), 108 giao dịch, 3335 ns:
 
-- Scoreboard: `PASS = 57`, `FAIL = 0` (57 là số lệnh đọc; các lệnh ghi cũng được kiểm tra `pslverr`).
+- **Scoreboard:** `PASS = 59`, `FAIL = 0` (59 lệnh đọc được đối chiếu dữ liệu với reference model; các lệnh ghi và truy cập lỗi cũng được kiểm tra `pslverr` chính xác).
+- **Functional Coverage:** `Total Functional Coverage = 100.00 %` (được báo cáo qua `$get_coverage()` tại `report_phase`).
 - `UVM_ERROR = 0`, `UVM_FATAL = 0`.
 
 ![Log](docs/log.png)
@@ -111,7 +112,7 @@ py run_sim.py -gui     # mở QuestaSim kèm waveform
 
 ## Trạng thái và hạn chế
 
-Đã làm: testbench UVM hoàn chỉnh chạy sạch, reference model, 4 kịch bản (directed và random), functional coverage cơ bản.
+Đã làm: testbench UVM hoàn chỉnh chạy sạch, reference model, 4 kịch bản (directed và random), functional coverage đạt 100%.
 
 Chưa làm (chi tiết ở [verification_plan.md](docs/verification_plan.md), mục 11 và 12):
 

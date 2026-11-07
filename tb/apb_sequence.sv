@@ -20,16 +20,17 @@ class apb_sequence extends uvm_sequence #(apb_transaction);
                 
                 req = apb_transaction::type_id::create("req");
                 start_item(req);
-                if (!req.randomize() with { paddr == 32'h00; pwrite == 1'b1; pwdata[0] == 1'b1; }) begin
-                    `uvm_error("SEQ_RAND_FAIL", "Randomization failed: Cannot generate data to activate sys_ctrl!")
-                end
+                req.paddr = 32'h00;
+                req.pwrite = 1'b1;
+                req.pwdata = $urandom();
+                req.pwdata[0] = 1'b1;
                 finish_item(req);
 
                 req = apb_transaction::type_id::create("req");
                 start_item(req);
-                if (!req.randomize() with { paddr == 32'h08; pwrite == 1'b1; }) begin
-                    `uvm_error("SEQ_RAND_FAIL", "Randomization failed: Cannot generate data for data_in!")
-                end
+                req.paddr = 32'h08;
+                req.pwrite = 1'b1;
+                req.pwdata = $urandom();
                 finish_item(req);
             end
 
@@ -39,9 +40,8 @@ class apb_sequence extends uvm_sequence #(apb_transaction);
                 foreach (addr_list[i]) begin
                     req = apb_transaction::type_id::create("req");
                     start_item(req);
-                    if (!req.randomize() with { paddr == addr_list[i]; pwrite == 1'b0; }) begin
-                        `uvm_error("SEQ_RAND_FAIL", $sformatf("Randomization failed: Cannot generate READ cmd for paddr=0x%0h", addr_list[i]))
-                    end
+                    req.paddr = addr_list[i];
+                    req.pwrite = 1'b0;
                     finish_item(req);
                 end
             end
@@ -51,16 +51,15 @@ class apb_sequence extends uvm_sequence #(apb_transaction);
                 
                 req = apb_transaction::type_id::create("req");
                 start_item(req);
-                if (!req.randomize() with { paddr == 32'h14; pwrite == 1'b1; }) begin
-                    `uvm_error("SEQ_RAND_FAIL", "Randomization failed: Cannot generate invalid WRITE cmd!")
-                end
+                req.paddr = 32'h14;
+                req.pwrite = 1'b1;
+                req.pwdata = $urandom();
                 finish_item(req);
 
                 req = apb_transaction::type_id::create("req");
                 start_item(req);
-                if (!req.randomize() with { paddr == 32'h20; pwrite == 1'b0; }) begin
-                    `uvm_error("SEQ_RAND_FAIL", "Randomization failed: Cannot generate invalid READ cmd!")
-                end
+                req.paddr = 32'h20;
+                req.pwrite = 1'b0;
                 finish_item(req);
             end
 
@@ -68,11 +67,17 @@ class apb_sequence extends uvm_sequence #(apb_transaction);
                 `uvm_info("SEQ", $sformatf("Running Mode: TEST_RANDOM_STRESS (Executing %0d random transactions)", loop_count), UVM_LOW)
                 
                 repeat(loop_count) begin
+                    int r;
                     req = apb_transaction::type_id::create("req");
                     start_item(req);
-                    if (!req.randomize()) begin
-                        `uvm_error("SEQ_RAND_FAIL", "Randomization failed: Cannot generate random data!")
-                    end
+                    req.pwrite = $urandom_range(0, 1);
+                    req.pwdata = $urandom();
+                    r = $urandom_range(0, 9);
+                    if (r < 3) req.paddr = 32'h00;
+                    else if (r < 4) req.paddr = 32'h04;
+                    else if (r < 7) req.paddr = 32'h08;
+                    else if (r < 8) req.paddr = 32'h0C;
+                    else req.paddr = ($urandom_range(32'h10, 32'hFF) & ~32'h3);
                     finish_item(req);
                 end
             end

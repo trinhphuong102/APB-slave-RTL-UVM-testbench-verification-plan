@@ -13,3 +13,6 @@ dump.vcd
 # Python
 __pycache__/
 *.pyc
+*.bak
+*.xml
+

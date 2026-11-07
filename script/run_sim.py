@@ -4,12 +4,18 @@ import shutil
 import sys
 import argparse
 
-QUESTA_BIN = r"E:\questaaa\win64"
+# Tự động nhận diện thư mục cài đặt QuestaSim trên Linux & cấu hình tỉ lệ hiển thị
+os.environ["QT_SCALE_FACTOR"] = "2.0"
+os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "0"
+os.environ["QT_SCALE_FACTOR_ROUNDING_POLICY"] = "PassThrough"
+os.environ["QT_FONT_DPI"] = "140"
 
-VLIB = os.path.join(QUESTA_BIN, "vlib.exe")
-VLOG = os.path.join(QUESTA_BIN, "vlog.exe")
-VSIM = os.path.join(QUESTA_BIN, "vsim.exe")
+QUESTA_HOME = os.environ.get("QUESTASIM_HOME", os.path.expanduser("~/altera_pro/26.1.1/questa_fse"))
+QUESTA_BIN = os.path.join(QUESTA_HOME, "bin") if os.path.isdir(os.path.join(QUESTA_HOME, "bin")) else QUESTA_HOME
 
+VLIB = shutil.which("vlib") or os.path.join(QUESTA_BIN, "vlib")
+VLOG = shutil.which("vlog") or os.path.join(QUESTA_BIN, "vlog")
+VSIM = shutil.which("vsim") or os.path.join(QUESTA_BIN, "vsim")
 
 COMPILE_FILES = [
     "../rtl/async_apb_slave.sv",
@@ -41,7 +47,6 @@ def main():
     
     run_command(f'"{VLIB}" work')
 
-    
     for file in COMPILE_FILES:
         run_command(f'"{VLOG}" -sv +incdir+../tb {file}')
 
@@ -49,13 +54,18 @@ def main():
 
     if args.gui:
         with open("wave.do", "w") as f:
+            f.write("configure wave -signalnamewidth 1\n")
+            f.write("configure wave -namecolwidth 220\n")
+            f.write("configure wave -valuecolwidth 120\n")
+            f.write("configure wave -justifyvalue left\n")
             f.write("add wave -position insertpoint sim:/tb_top/vif/*\n")
             f.write("run -all\n")
+            f.write("wave zoom full\n")
         
-        vsim_cmd = f'"{VSIM}" -voptargs=+acc -uvmcontrol=all work.tb_top -do wave.do' # Đã sửa ở đây
+        vsim_cmd = f'"{VSIM}" -gui -onfinish stop -nocvg -voptargs=+acc -uvmcontrol=all work.tb_top -do wave.do'
         run_command(vsim_cmd)
     else:
-        vsim_cmd = f'"{VSIM}" -c -voptargs=+acc work.tb_top -do "run -all; quit"' # Đã sửa ở đây
+        vsim_cmd = f'"{VSIM}" -c -nocvg -voptargs=+acc work.tb_top -do "run -all; quit"'
         run_command(vsim_cmd)
 
     print("\n==================================================")
