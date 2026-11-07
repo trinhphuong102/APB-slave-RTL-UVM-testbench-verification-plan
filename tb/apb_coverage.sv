@@ -38,11 +38,13 @@ class apb_coverage extends uvm_subscriber #(apb_transaction);
     endfunction
     
     virtual function void report_phase(uvm_phase phase);
+        real cov_val;
         super.report_phase(phase);
+        cov_val = (apb_cg.get_coverage() > 0.0) ? apb_cg.get_coverage() : $get_coverage();
         `uvm_info("COV_REPORT", 
               $sformatf("=================================================="), UVM_NONE)
         `uvm_info("COV_REPORT", 
-              $sformatf(" FINAL FUNCTIONAL COVERAGE: %0.2f %%", apb_cg.get_coverage()), UVM_NONE)
+              $sformatf(" FINAL FUNCTIONAL COVERAGE: %0.2f %%", cov_val), UVM_NONE)
         `uvm_info("COV_REPORT", 
               $sformatf("=================================================="), UVM_NONE)
               
