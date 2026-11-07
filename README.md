@@ -58,11 +58,11 @@ QuestaSim (UVM 1.1d), 108 giao dịch, 3335 ns:
 - **Functional Coverage:** `Total Functional Coverage = 100.00 %` (được báo cáo qua `$get_coverage()` tại `report_phase`).
 - `UVM_ERROR = 0`, `UVM_FATAL = 0`.
 
-![Log](docs/log.png)
+![Log](docs/simulation_log.png)
 
 ![Waveform](docs/waveform.png)
 
-Trong log: `sys_ctrl = 0x1e102a97` (đảo bật), `data_in = 0x3db0b7ea`, đọc `data_out` ra `0xc24f4815 = ~0x3db0b7ea`; đọc địa chỉ 0x20 ra `Data=0x0 | Err=1`.
+Trong log báo cáo kết thúc mô phỏng (UVM Report Summary): Scoreboard xác nhận toàn bộ 59/59 lệnh đọc chính xác (`PASS = 59 | FAIL = 0`), độ bao phủ đạt `Total Functional Coverage = 100.00 %`, và testbench kết thúc sạch sẽ không có lỗi (`UVM_ERROR = 0`, `UVM_FATAL = 0`).
 
 ## Cách chạy
 
